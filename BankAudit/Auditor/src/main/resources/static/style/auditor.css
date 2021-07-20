@@ -1,0 +1,129 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.body-left {
+    position: relative;
+    height: 100%;
+    width: 66%;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    position:absolute;
+    top: 50px;
+    font-size: large;
+    color: black;
+}
+
+.body-left .audit-bank {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    border-width: 0px 1px 0px 0px; 
+    border-style: solid solid solid solid;
+    border-color:white rgb(57, 61, 73) white white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.body-left .audit-system {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    right: 0px;
+    border-width: 0px 0px 0px 1px; 
+    border-style: solid solid solid solid;
+    border-color:white white white rgb(57, 61, 73);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.body-right {
+    position: relative;
+    height: 100%;
+    width: 34%;
+    right: 0px;
+    background-color: #393D49;
+    color: #FAFAFA;
+}
+
+.body-left form {
+    width: 350px;
+    height: 300px;
+}
+
+.body-left .auditResult {
+    width: 420px;
+    height: 300px;
+    position: absolute;
+    bottom: 100px;
+    border-color: grey;
+    border-style: ridge;
+    border-width: 3px;
+}
+
+.body-left .auditResult p {
+    position: relative;
+    top: 5px;
+    left: 5px;
+    font-size: 15px;
+}
+
+.body-left .auditResult #auditResult1 {
+    position: relative;
+    left: 50px;
+    bottom: -20px;
+    height: 250px;
+    width: 300px;
+    color: black;
+    /* background-color: wheat; */
+}
+
+.body-left .auditResult #auditResult2 {
+    position: relative;
+    left: 50px;
+    bottom: -20px;
+    height: 250px;
+    width: 400px;
+    color: black;
+    /* background-color: wheat; */
+}
+
+.body-left .layui-form {
+    position: absolute;
+    top: 150px;
+    height: 350px;
+}
+
+.body-right p {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 15px;
+}
+
+.body-right #auditState {
+    position: absolute;
+    top: 40px;
+    left: 10px;
+    height: 700px;
+    width: 400px;
+    overflow-y:auto;
+    background-color: rgb(57, 61, 73);
+}
+
+.body-right button {
+    position: absolute;
+    bottom: 50px;
+    right: 30px;
+}

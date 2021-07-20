@@ -1,0 +1,23 @@
+.red-head {
+    background-color: rgb(219, 38, 28);
+}
+.red-left {
+    background-color: rgb(117, 68, 68);
+}
+.red-highlight {
+    background-color: rgb(187, 52, 29);
+}
+
+.body-iframe {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    bottom: 0px;
+    height: 100%;
+    /* background-color: yellow; */
+}
+
+.topNav {
+    cursor: pointer;
+}

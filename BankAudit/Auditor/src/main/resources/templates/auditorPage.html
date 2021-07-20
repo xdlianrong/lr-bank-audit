@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>银行审计</title>
+    <link rel="stylesheet" href="../static/layui.css">
+    <link rel="stylesheet" href="../static/style/auditor.css">
+</head>
+
+<body>
+    <div class="body-left">
+        <div class="audit-bank">
+            <div class="title">
+                <p>单银行审计</p>
+            </div>
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="width: 100px;">请选择审计对象</label>
+                    <div class="layui-input-block" style="width: 200px; position: absolute; right: 10px;">
+                        <select name="auditObject" lay-verify="required">
+                            <option value=""></option>
+                            <option value="bank1">bank1</option>
+                            <option value="bank2">bank2</option>
+                            <option value="bank3">bank3</option>
+                            <option value="bank4">bank4</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="width: 100px;">请选择审计内容</label>
+                    <div class="layui-input-block" style="width: 200px; position: absolute; right: 10px;">
+                        <select name="auditType" lay-verify="required">
+                            <option value=""></option>
+                            <option value="0">全部</option>
+                            <option value="1">资产和状态</option>
+                            <option value="2">交易平均值</option>
+                            <option value="3">交易方差</option>
+                            <option value="4">交易偏度</option>
+                            <option value="5">交易峰度</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-input-block" style="position: absolute; bottom: 180px;">
+                    <button class="layui-btn" lay-submit lay-filter="formBank">开始审计</button>
+                </div>
+            </form>
+            <div class="auditResult">
+                <p>审计结果：</p>
+                <div id="auditResult1"></div>
+            </div>
+        </div>
+        <div class="audit-system">
+            <div class="title">
+                <p>系统审计</p>
+            </div>
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="width: 100px;">请选择审计对象</label>
+                    <div class="layui-input-block" style="width: 200px; position: absolute; right: 10px;">
+                        <select name="auditObject" lay-verify="required">
+                            <!-- <option value=""></option> -->
+                            <option value="system">系统</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="width: 100px;">请选择审计内容</label>
+                    <div class="layui-input-block" style="width: 200px; position: absolute; right: 10px;">
+                        <select name="auditType" lay-verify="required">
+                            <option value=""></option>
+                            <option value="0">全部</option>
+                            <option value="1">系统资产和</option>
+                            <option value="2">各银行的市场占有率</option>
+                            <option value="3">实时平均价格</option>
+                            <option value="4">HHI指数</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-input-block" style="position: absolute; bottom: 180px;">
+                    <button class="layui-btn" lay-submit lay-filter="formSystem">开始审计</button>
+                </div>
+            </form>
+            <div class="auditResult">
+                <p>审计结果：</p>
+                <div id="auditResult2"></div>
+            </div>
+        </div>
+    </div>
+    <div class="body-right">
+        <p>零知识证明过程：</p>
+        <div id="auditState"></div>
+        <button class="layui-btn" onclick="clearString()">清空过程</button>
+    </div>
+    <script src="../static/layui.all.js"></script>
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('submit(formBank)', function (formData) {
+                console.log(formData.field);
+                $ = layui.jquery;
+                $("#auditState").append('正在从链上拉取数据...<br>');
+                layui.use(['layer', 'jquery'], function () {
+                    console.log("bank");
+                    // $("#auditResult1").append("hello world");
+                    $.ajax({
+                        url: "http://localhost:8180/auditRequestBank",
+                        // data: JSON.stringify({
+                        //     'to': "bank1"
+                        // }),
+                        data: JSON.stringify({
+                            'object': formData.field.auditObject,
+                            'type': formData.field.auditType
+                        }),
+                        headers: {
+                            "Content-Type": "application/json; charset=UTF-8",
+                            encoding: "UTF-8",
+                        },
+                        type: "Post",
+                        // beforeSend: function() {
+                        //     setTimeout(function() {
+                        //         $("#auditState").append('正在进行零知识证明...<br>');
+                        //     }, 1000);
+
+                        // },
+                        errror: function (responseText) {
+                            console.log(responseText);
+                        },
+                        success: function (data) {
+                            var str = '';
+                            str = data;
+                            // console.log(data);
+                            // console.log(str);
+                            displayBank(formData.field.auditType, str);
+                        },
+                    })
+                })
+
+                return false;
+            });
+        });
+
+        // layui.use('slider', function () {
+        //     var slider = layui.slider;
+
+        //     //渲染
+        //     slider.render({
+        //         elem: '#auditState'  //绑定元素
+        //     });
+        // });
+
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('submit(formSystem)', function (formData) {
+                console.log(formData.field);
+                $ = layui.jquery;
+                $("#auditState").append('正在从链上拉取数据...<br>');
+                layui.use(['layer', 'jquery'], function () {
+                    console.log("system");
+                    $.ajax({
+                        url: "http://localhost:8180/auditRequestSystem",
+                        // data: JSON.stringify({
+                        //     'to': "bank1"
+                        // }),
+                        data: JSON.stringify({
+                            'object': formData.field.auditObject,
+                            'type': formData.field.auditType
+                        }),
+                        headers: {
+                            "Content-Type": "application/json; charset=UTF-8",
+                            encoding: "UTF-8",
+                        },
+                        type: "Post",
+                        // beforeSend: function() {
+                        //     setTimeout(function() {
+                        //         $("#auditState").append('正在进行零知识证明...<br>');
+                        //     }, 1000);
+
+                        // },
+                        errror: function (responseText) {
+                            console.log(responseText);
+                        },
+                        success: function (data) {
+                            var str = '';
+                            str = data;
+                            // console.log(data);
+                            // console.log(str);
+                            displaySystem(formData.field.auditType, str);
+                        },
+                    })
+                })
+
+                return false;
+            });
+        });
+
+        function clearString() {
+            $("#auditState").empty();
+        }
+
+        function displayBank(auditType, str) {
+            if (auditType == "0") {
+                $("#auditState").append('正在进行零知识证明...<br>')
+                setTimeout(function () {
+                    $("#auditState").append('对系统资产进行审计...<br>')
+                    $("#auditState").append(str.r1 + '<br>')
+                }, 300)
+                setTimeout(function () {
+                    $("#auditState").append('对交易次数进行审计...<br>')
+                    $("#auditState").append(str.r2 + '<br>')
+                }, 400)
+                setTimeout(function () {
+                    $("#auditState").append('对交易平方和进行审计...<br>')
+                    $("#auditState").append(str.x + '<br>')
+                }, 500)
+                setTimeout(function () {
+                    $("#auditState").append('对交易立方和进行审计...<br>')
+                    $("#auditState").append(str.y + '<br>')
+                }, 600)
+                setTimeout(function () {
+                    $("#auditState").append('对交易四次方和进行审计...<br>')
+                    $("#auditState").append(str.z + '<br>')
+                    $("#auditState").append('======================================<br>');
+                    $("#auditResult1").empty(); //清空子元素
+                    $("#auditResult1").append(str.strRequest); //添加元素
+                }, 700)
+            } else {
+                $("#auditState").append('正在进行零知识证明...<br>')
+                setTimeout(function () {
+                    $("#auditState").append(str.blinding + '<br>')
+                    $("#auditState").append('======================================<br>');
+                    $("#auditResult1").empty(); //清空子元素
+                    $("#auditResult1").append(str.strRequest); //添加元素
+                }, 500)
+            }
+        }
+
+        function displaySystem(auditType, str) {
+            $("#auditState").append('正在进行零知识证明...<br>')
+
+            setTimeout(function () {
+                $("#auditState").append('对bank1的资产进行审计...<br>');
+                $("#auditState").append(str.bank1Blinding + '<br>');
+            }, 200)
+            setTimeout(function () {
+                $("#auditState").append('对bank2的资产进行审计...<br>');
+                $("#auditState").append(str.bank2Blinding + '<br>');
+            }, 400)
+            setTimeout(function () {
+                $("#auditState").append('对bank3的资产进行审计...<br>');
+                $("#auditState").append(str.bank3Blinding + '<br>');
+            }, 600)
+            setTimeout(function () {
+                $("#auditState").append('对bank4的资产进行审计...<br>');
+                $("#auditState").append(str.bank4Blinding + '<br>');
+                $("#auditState").append('======================================<br>');
+                $("#auditResult2").empty(); //清空子元素
+                $("#auditResult2").append(str.strRequest); //添加元素
+            }, 800)
+        }
+
+        function display(auditObject, str) {
+            if (auditObject == "system") {
+
+                $("#auditState").append('对系统资产进行审计...<br>');
+
+                setTimeout(function () {
+                    $("#auditState").append('审计完成，计算相应指标...<br>');
+                    $("#auditState").append('零知识证明通过<br>');
+                    $("#auditState").append('======================================<br>');
+                    $("#auditResult1").empty(); //清空子元素
+                    $("#auditResult1").append(str); //添加元素
+                }, 600);
+
+
+            } else {
+                setTimeout(function () {
+                    $("#auditState").append('资产和证明完成<br>');
+                }, 300);
+                setTimeout(function () {
+                    $("#auditState").append('交易金额承诺验证完成<br>');
+                    $("#auditState").append('交易金额二次方承诺验证完成<br>');
+                    $("#auditState").append('交易金额三次方承诺验证完成<br>');
+                    $("#auditState").append('交易金额四次方承诺验证完成<br>');
+                    $("#auditState").append('零知识证明通过<br>');
+                    $("#auditState").append('======================================<br>');
+                    $("#auditResult1").empty(); //清空子元素
+                    $("#auditResult1").append(str); //添加元素
+                }, 700);
+
+            }
+        }
+    </script>
+</body>

@@ -1,0 +1,1 @@
+{"comSum":1100,"doubleComSum":50000,"quadraComSum":1700000000,"r1":625698463642,"r2":642837510133,"transactionTime":2,"tripleComSum":9000000,"x":580911242873,"y":334849749437,"z":486773459060}
